@@ -100,7 +100,7 @@ bool Stack::IsFull() const{
 //Edit: No, this makes it empty, the destructor deallocates the memory and deletes the whole structure
 //      This leaves the space for the structure but empties the actual info on it
 void Stack::MakeEmpty(){
-    while(!IsEmpty)
+    while(!IsEmpty())
     {
         Pop();
     }
@@ -157,7 +157,7 @@ int Stack::Min() const{
     int size = Size();
 
     //starts at 1 so that it doesn't read the first element twice
-    for(int x = 1; x <= size; x++){
+    for(int x = 1; x <= top; x++){
         if(array[x] < min)
         {
             min = array[x];
@@ -170,16 +170,19 @@ int Stack::Min() const{
 //looks at num n levels down from the top (remember that top is 0)
 int Stack::Peek(unsigned int n) const{
     int peeked = -1;
-    int size = Size();
+    int check = n;
 
     //I don't need a wrong number screwing it up
-    //so size is a parameter for that if
-    if(!IsEmpty() && n < size)
-    {
-        peeked = array[n];
-    }
+    // so I need to check if n is bigger than the max value or not
+   if(check < 0 || n > top){
+    throw StackInvalidPeek();
+   }
 
-    return peeked;
+   peeked = array[top - check];
+
+   return peeked;
+
+    
 }
 
 
